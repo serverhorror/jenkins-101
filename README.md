@@ -2,8 +2,9 @@
 
 A short introduction to jenkins.
 
-This branch is deliberately, seemingly empty.
+## 001 How to start?
 
-Proceed thru the `step/...` branches to see what would work.
+1. Create a file named `Jenkinsfile`
+1. add the simplest *pipeline* we can think of
 
 /M
