@@ -11,6 +11,15 @@ pipeline {
     // we'll be using
     agent any
 
+    // Look! This is new!
+    // Find out what it does and discuss!
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '2'))
+        timeout(time: 15, unit: 'MINUTES')
+    }
+
+
+
     triggers {
         pollSCM("H/5 * * * *")
     }
@@ -102,6 +111,29 @@ pipeline {
                     steps {
                         sh 'python --version'
                         sh 'sleep 10'
+                    }
+                }
+            }
+        }
+        stage('What should be executed?'){
+            parallel{
+                stage('Run a simple docker command'){
+                    agent { docker { image 'busybox:latest' } }
+                    steps {
+                        sh 'wget -q -O - http://example.com | md5sum'
+                    }
+                }
+                stage('Build custom image on demand') {
+                    agent {
+                        dockerfile {
+                            filename 'Dockerfile'
+                            args '--env JENKINS_101=injected'
+                        }
+                    }
+                    steps {
+                        sh 'env'
+                        sh 'echo $JENKINS_101'
+                        sh 'svn --version'
                     }
                 }
             }
